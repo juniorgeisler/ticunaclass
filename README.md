@@ -1,6 +1,6 @@
 # Trilha Ticuna
 
 Curso de Ticuna sem áudio, com frases dos livros *Seja Feliz para Sempre!* e *Aprenda com as Histórias da Bíblia* (jw.org).
-O progresso fica salvo na conta Google de cada pessoa (Firebase).
+Não precisa de login: o progresso fica salvo no próprio aparelho (celular ou computador) de cada pessoa.
 
 O `index.html` é gerado; não edite à mão.
