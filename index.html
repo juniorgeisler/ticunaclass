@@ -218,6 +218,12 @@ a{color:var(--river)}
 #chat .cfoot{max-width:560px;width:100%;margin:0 auto;padding:10px 16px calc(10px + env(safe-area-inset-bottom));box-sizing:border-box;display:flex;gap:8px;align-items:flex-end}
 #chat textarea{flex:1;font:inherit;min-height:44px;max-height:120px;padding:10px 12px;border:2px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);resize:none}
 #chat .cfoot .btn{padding:12px 16px}
+
+.hintrow{display:flex;align-items:center;gap:12px;margin-top:10px;flex-wrap:wrap}
+.hintbtn{border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 14px;font:inherit;font-weight:700;cursor:pointer}
+.hintbtn:disabled{opacity:.5;cursor:default}
+.hintmask{font-size:1.1rem;letter-spacing:.06em}
+.spellline .tile{margin-right:-4px}
 </style>
 
 <header class="top"><div class="band" aria-hidden="true"></div>
@@ -455,6 +461,20 @@ function distractors(it, n, field){
   for(const t of tiers){ for(const x of shuffle(t)){ if(out.length>=n) break; if(!out.some(o=>bare(val(o))===bare(val(x)))) out.push(x); } }
   return out.slice(0,n);
 }
+// divide a palavra em pedaços para montar (sílabas simples: consoantes + vogais)
+function graphemes(w){ return w.normalize("NFC").match(/.\p{M}*/gu) || []; }
+function spellChunks(w){
+  w = w.trim(); if(/\s/.test(w)) return [];
+  const g = graphemes(w), isV = c => /[aeiouü]/i.test(c.normalize("NFD")[0]);
+  const out = []; let cur = "", sawV = false;
+  for(const c of g){
+    if(isV(c)){ cur += c; sawV = true; }
+    else if(c === "'" || c === "ꞌ"){ cur += c; }
+    else { if(sawV){ out.push(cur); cur = ""; sawV = false; } cur += c; }
+  }
+  if(cur){ if(!sawV && out.length) out[out.length-1] += cur; else out.push(cur); }
+  return out.length >= 2 ? out : (g.length >= 3 ? g : []);
+}
 function exTypes(it){
   if(it.kind==="phrase"){
     const t = ["build_t", "mc_t2p"];
@@ -486,6 +506,8 @@ function buildMixedCore(items, R){
   const q = [];
   W.forEach(it => { if(!S.stats[it.id]) q.push({t:"intro", it}); q.push({t:"mc_t2p", it}); });
   if(W.length >= 2) q.push({t:"match", items: W.slice(0, 5)});
+  // antes de escrever: reconhecer a palavra escrita e montá-la por sílabas
+  W.forEach(it => { q.push({t:"mc_p2t", it}); if(spellChunks(it.tcn).length >= 2) q.push({t:"spell", it}); });
   P.forEach(it => {
     if(!S.stats[it.id]) q.push({t:"intro", it});
     const nw = (it.words||[]).map((w,i)=>[w,i]).filter(([w]) => w[2]);
@@ -509,7 +531,9 @@ function buildQueue(items, isLesson){
     // primeiro contato: reconhecimento; depois produção
     const easy = it.kind==="phrase" ? (types.includes("build_p")?"build_p":"mc_t2p") : "mc_t2p";
     first.push({t: isNew ? easy : types[0], it});
-    second.push({t: types.find(x => x !== (isNew?easy:types[0])) || types[0], it});
+    let t2 = types.find(x => x !== (isNew?easy:types[0])) || types[0];
+    if(isNew && t2 === "type_p2t" && spellChunks(it.tcn).length >= 2) t2 = "spell"; // palavra nova: montar antes de escrever
+    second.push({t: t2, it});
   });
   q.push(...first);
   const vocab = items.filter(i=>i.kind==="vocab");
@@ -578,12 +602,41 @@ function drawEx(){
     $("#check").onclick = () => answer(LS.opts[LS.sel] === it, toPt ? ptOf(it) : it.tcn);
     return;
   }
+  if(ex.t === "spell"){
+    const ans = spellChunks(it.tcn);
+    const others = ALL.filter(x => x.kind==="vocab" && x.id!==it.id && (x.unit===it.unit || Math.random()<.05));
+    const pool = []; shuffle(others).forEach(o => spellChunks(o.tcn).forEach(c => { if(!ans.some(a=>bare(a)===bare(c)) && !pool.some(p=>bare(p)===bare(c))) pool.push(c); }));
+    const bank = shuffle([...ans, ...pick(pool, Math.min(3, Math.max(2, 6-ans.length)))]);
+    LS.bank = bank; LS.line = [];
+    shell(`<div class="kicker">Monte a palavra</div>
+      <div class="prompt"><div class="bubble">${esc(it.pt)}</div></div>
+      <div class="answer-line spellline" id="line" aria-label="Sua resposta"></div>
+      <div class="bank" id="bank">${bank.map((w,i)=>`<button class="tile tcn" data-b="${i}">${esc(w)}</button>`).join("")}</div>`, checkBtn);
+    const drawLine = () => {
+      $("#line").innerHTML = LS.line.map((bi,li)=>`<button class="tile tcn" data-l="${li}">${esc(bank[bi])}</button>`).join("");
+      document.querySelectorAll("[data-b]").forEach(b => b.classList.toggle("used", LS.line.includes(+b.dataset.b)));
+      document.querySelectorAll("[data-l]").forEach(b => b.onclick = () => { if(LS.answered) return; LS.line.splice(+b.dataset.l,1); drawLine(); });
+      $("#check").disabled = !LS.line.length;
+    };
+    document.querySelectorAll("[data-b]").forEach(b => b.onclick = () => { if(LS.answered || LS.line.includes(+b.dataset.b)) return; LS.line.push(+b.dataset.b); drawLine(); });
+    $("#check").onclick = () => { if(LS.answered) return next(); answer(norm(LS.line.map(i=>bank[i]).join("")) === norm(it.tcn), it.tcn); };
+    return;
+  }
   if(ex.t === "type_p2t"){
     shell(`<div class="kicker">Escreva em Ticuna</div>
       <div class="prompt"><div class="bubble">${esc(it.pt)}</div></div>
       <textarea class="inp tcn" id="inp" placeholder="Digite em Ticuna" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+      <div class="hintrow"><button class="hintbtn" id="hint" type="button">Dica</button><span class="hintmask tcn" id="hmask" aria-live="polite"></span></div>
       <div class="keys" aria-label="Letras especiais">${["ü","ü̃","ã","ẽ","ĩ","õ","ũ","'","á","é","í"].map(k=>`<button data-k="${k}">${k}</button>`).join("")}<button data-k="̃" title="Adicionar til à letra anterior">◌̃</button></div>`, checkBtn);
     const inp = $("#inp"); inp.focus();
+    const gT = graphemes(it.tcn); let shown = 0;
+    $("#hint").onclick = () => {
+      // a cada toque revela mais uma letra; a palavra ainda precisa ser digitada
+      shown = Math.min(gT.length - 1, shown + 1); LS.hinted = true;
+      $("#hmask").textContent = gT.map((c, i) => i < shown ? c : (c === " " ? " " : "_")).join(" ");
+      if(shown >= gT.length - 1) $("#hint").disabled = true;
+      inp.focus();
+    };
     inp.oninput = () => $("#check").disabled = !inp.value.trim();
     inp.onkeydown = e => { if(e.key==="Enter"){ e.preventDefault(); if(!$("#check").disabled) $("#check").click(); } };
     document.querySelectorAll("[data-k]").forEach(b => b.onclick = () => {
@@ -1043,6 +1096,22 @@ Regras:
 
 Gramática que o curso ensina:
 ${GRAM}`;
+// pedido do Junior: explicar verbos que mudam de sentido com outras palavras (nüü̃ nadau = ver; tüna nadau = cuidar de)
+const VERB_TASK = `Tarefa: explicar um verbo que muda de sentido quando vem com outras palavras (por exemplo, nadau: nüü̃ nadau = ver; tüna/nüna nadau = cuidar de).
+
+Passos:
+1. Use a ferramenta "buscar" com o verbo. Depois busque também cada palavra que acompanha o verbo nas frases encontradas (nüü̃, tüna, nüna, naca' e outras). Faça uma busca por palavra.
+2. Use só palavras e frases que apareceram nos resultados ou que o aluno enviou. Nunca invente Ticuna.
+3. Monte a explicação nesta ordem:
+- Significado básico: separe as partes do verbo (por exemplo, na- = ele + raiz) e diga o sentido simples.
+- Uma seção para cada combinação, com um título curto como "Ver" ou "Cuidar de". Em cada uma, diga que palavra acompanha o verbo e qual sentido resulta.
+- Para cada combinação, dê de 1 a 2 exemplos: a frase em Ticuna, depois a tradução ao pé da letra, depois a tradução natural, e a origem: "frase do livro", "PDF do aluno" ou "dedução".
+- Se não houver frase nos resultados para uma combinação, diga isso e não crie exemplo.
+- Termine com "Para lembrar", com no máximo 3 itens em lista simples, no formato "palavra + verbo = sentido".
+4. Se o aluno pedir outra pessoa ou outro tempo e a forma não aparecer nos resultados, você pode deduzir pelas regras da gramática do curso (tcha- = eu, cu- = você, na- = ele, ta-/pe- = nós/vocês, -gü = plural, tá = futuro). Diga claramente "isto é uma dedução", explique de que partes montou e peça que o aluno confirme. Se não der para deduzir com segurança, diga que não sabe.
+5. Sem tabelas nem negrito; no máximo listas simples com "-".
+6. Resposta curta. Se houver muitas combinações, mostre as 3 mais úteis e ofereça mostrar as outras.`;
+const isVerb = it => it && it.kind === "vocab" && /^(ele|ela|eu|você|nós|vocês|eles|elas)\b|\b\w+(ar|er|ir|or)\b/i.test(it.pt);
 function chatSearch(q){
   q = bare(String(q || "")); if(!q) return [];
   const words = [], phrases = [], seenW = new Set(), seenP = new Set();
@@ -1072,7 +1141,7 @@ function openChat(it){
   }
   if(!log.children.length || (log.children.length === 1 && CHATCTX)){
     const sg = document.createElement("div"); sg.className = "sugs";
-    const opts = CHATCTX ? (CHATCTX.kind === "phrase" ? ["Como fica no presente?", "Como fica no futuro?", "Explique palavra por palavra", "E se fosse 'eu' em vez de 'ele'?"] : ["Mostre frases com essa palavra", "Como conjugar com eu, você e nós?"]) : ["Como digo 'eu vou trabalhar amanhã'?", "Qual a diferença entre i e ga?", "Como funciona o tá?"];
+    const opts = CHATCTX ? (CHATCTX.kind === "phrase" ? ["Como fica no presente?", "Como fica no futuro?", "Explique palavra por palavra", "E se fosse 'eu' em vez de 'ele'?"] : (isVerb(CHATCTX) ? ["Explique o verbo: " + CHATCTX.tcn, "Mostre frases com essa palavra", "Como conjugar com eu, você e nós?"] : ["Mostre frases com essa palavra", "Como conjugar com eu, você e nós?"])) : ["Explique o verbo: nadau", "Como digo 'eu vou trabalhar amanhã'?", "Qual a diferença entre i e ga?"];
     opts.forEach(o => { const b = document.createElement("button"); b.type = "button"; b.textContent = o; b.onclick = () => { sg.remove(); sendChat(o); }; sg.append(b); });
     log.append(sg);
   }
@@ -1082,7 +1151,9 @@ async function sendChat(text){
   text = (text || "").trim(); if(!text || CHATCTL) return;
   $("#cin").value = ""; const sg = $("#clog .sugs"); if(sg) sg.remove(); chatMsg("me", text);
   const first = CHAT.length === 0 && CHATCTX;
-  CHAT.push({role: "user", content: first ? `Estou estudando este item do curso:\nTicuna: ${CHATCTX.tcn}\nTradução: ${CHATCTX.pt}${CHATCTX.note ? "\nNota: " + CHATCTX.note : ""}${CHATCTX.words ? "\nPalavras: " + CHATCTX.words.map(w => w[0] + " = " + w[1]).join("; ") : ""}\n\nMinha pergunta: ${text}` : text});
+  const vm = text.match(/^explique o verbo:?\s*(.+)$/i);
+  const asked = vm ? VERB_TASK + "\n\nExplique o verbo: " + vm[1].trim() : text;
+  CHAT.push({role: "user", content: first ? `Estou estudando este item do curso:\nTicuna: ${CHATCTX.tcn}\nTradução: ${CHATCTX.pt}${CHATCTX.note ? "\nNota: " + CHATCTX.note : ""}${CHATCTX.words ? "\nPalavras: " + CHATCTX.words.map(w => w[0] + " = " + w[1]).join("; ") : ""}\n\nMinha pergunta: ${asked}` : asked});
   const bubble = chatMsg("ai wait", "Pensando…");
   CHATCTL = new AbortController(); $("#csend").textContent = "Parar";
   try{
