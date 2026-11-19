@@ -501,24 +501,20 @@ function buildMixed(items, L){
   return q0.concat(buildMixedCore(items, R));
 }
 function buildMixedCore(items, R){
-  // lição nova: palavras primeiro, depois as frases do livro que usam essas palavras
+  // lição nova (curta, como o Junior pediu): apresentar as palavras, ligar os pares, montar por sílabas
+  // e treinar as frases do livro. Sem perguntas de lições anteriores e sem escolher palavra por palavra.
   const W = items.filter(i => i.kind==="vocab"), P = items.filter(i => i.kind==="phrase");
   const q = [];
-  W.forEach(it => { if(!S.stats[it.id]) q.push({t:"intro", it}); q.push({t:"mc_t2p", it}); });
-  if(W.length >= 2) q.push({t:"match", items: W.slice(0, 5)});
-  // antes de escrever: reconhecer a palavra escrita e montá-la por sílabas
-  W.forEach(it => { q.push({t:"mc_p2t", it}); if(spellChunks(it.tcn).length >= 2) q.push({t:"spell", it}); });
+  W.forEach(it => { if(!S.stats[it.id]) q.push({t:"intro", it}); });
+  for(let i = 0; i < W.length; i += 5){ const g = W.slice(i, i + 5); if(g.length >= 2) q.push({t:"match", items: g}); }
+  W.forEach(it => { if(spellChunks(it.tcn).length >= 2) q.push({t:"spell", it}); });
   P.forEach(it => {
     if(!S.stats[it.id]) q.push({t:"intro", it});
     const nw = (it.words||[]).map((w,i)=>[w,i]).filter(([w]) => w[2]);
     if(nw.length) q.push({t:"gap", it, wi: tokens(it.tcn).findIndex(t => bare(t)===bare(nw[0][0][0]))});
-    else q.push({t: tokens(ptOf(it)).length <= 9 ? "build_p" : "mc_t2p", it});
+    else q.push({t: tokens(ptOf(it)).length <= 9 ? "build_p" : "build_t", it});
   });
-  const rev = [];
-  W.forEach(it => rev.push({t: it.tcn.length <= 16 ? "type_p2t" : "mc_p2t", it}));
-  (R||[]).forEach(it => rev.push({t: it.kind==="vocab" ? "mc_p2t" : "build_t", it}));
-  P.forEach(it => rev.push({t: "build_t", it}));
-  q.push(...shuffle(rev));
+  q.push(...shuffle(P.map(it => ({t: "build_t", it}))));
   return q.filter(e => e.t !== "gap" || e.wi >= 0);
 }
 function buildQueue(items, isLesson){
