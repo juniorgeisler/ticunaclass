@@ -227,11 +227,11 @@ a{color:var(--river)}
 .spellline .tile{margin-right:-4px}
 /*LEITURA-CSS*/
 /* ---------- Leitura (A Sentinela), no estilo do JW Library ---------- */
-:root{--jw-bg:#FFFFFF;--jw-ink:#1F1F1F;--jw-muted:#6B6B6B;--jw-line:#E3E3E3;--jw-soft:#F2F2F2;--jw-accent:#4A6DA7;--jw-mark:#FFE58A;
+:root{--jw-head:#37474F;--jw-box:#9E9E9E;--jw-bg:#FFFFFF;--jw-ink:#1F1F1F;--jw-muted:#6B6B6B;--jw-line:#E3E3E3;--jw-soft:#F2F2F2;--jw-accent:#4A6DA7;--jw-mark:#FFE58A;
   --pre:#2F63C8;--pre-bg:#E3ECFB;--raiz:#1D7A46;--raiz-bg:#DDF2E5;--suf:#C2410C;--suf-bg:#FCE6DA}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--jw-bg:#121212;--jw-ink:#E6E6E6;--jw-muted:#A0A0A0;--jw-line:#2C2C2C;--jw-soft:#1E1E1E;--jw-accent:#8FB0E8;--jw-mark:#6B5A12;
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--jw-head:#B8C7CF;--jw-box:#5A5A5A;--jw-bg:#121212;--jw-ink:#E6E6E6;--jw-muted:#A0A0A0;--jw-line:#2C2C2C;--jw-soft:#1E1E1E;--jw-accent:#8FB0E8;--jw-mark:#6B5A12;
   --pre:#8DB1F5;--pre-bg:#1B2B4A;--raiz:#7FD6A1;--raiz-bg:#173525;--suf:#F5A06F;--suf-bg:#43230F}}
-:root[data-theme="dark"]{--jw-bg:#121212;--jw-ink:#E6E6E6;--jw-muted:#A0A0A0;--jw-line:#2C2C2C;--jw-soft:#1E1E1E;--jw-accent:#8FB0E8;--jw-mark:#6B5A12;
+:root[data-theme="dark"]{--jw-head:#B8C7CF;--jw-box:#5A5A5A;--jw-bg:#121212;--jw-ink:#E6E6E6;--jw-muted:#A0A0A0;--jw-line:#2C2C2C;--jw-soft:#1E1E1E;--jw-accent:#8FB0E8;--jw-mark:#6B5A12;
   --pre:#8DB1F5;--pre-bg:#1B2B4A;--raiz:#7FD6A1;--raiz-bg:#173525;--suf:#F5A06F;--suf-bg:#43230F}
 nav.tabs .in.six{grid-template-columns:repeat(6,1fr)}
 nav.tabs .in.six button{font-size:.68rem;padding-inline:2px}
@@ -253,7 +253,7 @@ nav.tabs .in.six button{font-size:.68rem;padding-inline:2px}
 #reader .ib[aria-pressed="true"]{background:var(--jw-soft);color:var(--jw-accent)}
 #reader .ib svg{width:22px;height:22px}
 #reader .rbody{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
-.jw{max-width:680px;margin:0 auto;padding:22px 20px 140px;font-family:"Noto Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:var(--jw-fs,18px);line-height:1.6}
+.jw{max-width:680px;margin:0 auto;padding:22px 20px 140px;font-family:"Noto Sans","Segoe UI",Roboto,Helvetica,Arial,sans-serif;font-size:var(--jw-fs,18px);line-height:1.75}
 .jw .kick{font-size:.72em;letter-spacing:.08em;text-transform:uppercase;color:var(--jw-muted);font-weight:600;margin:0 0 6px}
 .jw .song{font-size:.78em;color:var(--jw-muted);display:flex;gap:6px;align-items:center;margin:0 0 14px;text-transform:uppercase;letter-spacing:.04em}
 .jw .song svg{width:1.1em;height:1.1em;flex:0 0 auto}
@@ -261,12 +261,15 @@ nav.tabs .in.six button{font-size:.68rem;padding-inline:2px}
 .jw .theme{font-style:italic;margin:0 0 16px;color:var(--jw-ink)}
 .jw .focus{background:var(--jw-soft);border-radius:4px;padding:10px 14px;margin:0 0 22px;font-size:.88em}
 .jw .focus b{display:block;font-size:.8em;letter-spacing:.07em;text-transform:uppercase;color:var(--jw-muted);margin-bottom:2px}
-.jw h2{font-size:1em;font-weight:700;text-transform:uppercase;letter-spacing:.02em;margin:30px 0 12px;color:var(--jw-ink)}
-.jw p{margin:0 0 16px}
-.jw p .pn{font-weight:700;font-size:.82em;margin-right:.35em;color:var(--jw-ink)}
-.jw .jq{background:var(--jw-soft);border-radius:4px;padding:8px 12px;margin:0 0 14px;font-size:.88em;line-height:1.5}
-.jw .jq .qn{font-weight:700;margin-right:.3em}
-.jw ul{margin:0 0 16px;padding-left:1.2em}
+.jw h2{font-size:1.25em;line-height:1.3;font-weight:800;text-transform:uppercase;letter-spacing:.01em;margin:40px 0 20px;color:var(--jw-head)}
+.jw p{margin:0 0 30px}
+.jw p .pn{font-weight:700;font-size:.62em;vertical-align:.7em;line-height:0;margin-right:.3em;color:var(--jw-ink)}
+.jw .jq{margin:0 0 12px;font-size:.84em;line-height:1.55;color:var(--jw-muted)}
+.jw .ans{display:block;width:100%;min-height:58px;margin:0 0 30px;padding:10px 12px;border:1.5px solid var(--jw-box);border-radius:6px;background:transparent;color:var(--jw-ink);font:inherit;font-size:.9em;line-height:1.5;resize:vertical}
+.jw .ans::placeholder{color:transparent}
+.jw .ans:focus::placeholder{color:var(--jw-muted)}
+.jw .jq .qn{font-weight:700;margin-right:.3em;color:var(--jw-ink)}
+.jw ul{margin:0 0 12px;padding-left:1.2em;font-size:.95em}
 .jw li{margin:0 0 8px}
 .jw .box{border:2px solid var(--jw-line);border-radius:6px;padding:12px 14px;margin:22px 0}
 .jw .small{font-size:.8em;color:var(--jw-muted)}
@@ -1380,9 +1383,12 @@ const STOP = /^(show table of contents|mostrar tabela de conteúdos|sumário|sum
 const RE_DATE = /^\d{1,2}(?:\s*[-–]\s*\d{1,2})?\s+(?:de\s+)?[\p{L}\p{M}']+.*\d{4}/iu;
 const RE_SONG = /^(wiyae|cântico|cantico|[\p{Lu}\p{M}']{3,})\s+\d{1,3}\b/u;
 const RE_THEME = /(?:[—–]\s*\[?\s*[\p{Lu}\p{M}0-9 .]+\d+:\d+[\d,\s–-]*\]?\.?|\(\s*[^()]*\d+:\d+[^()]*\)\.?)\s*$/u;
-const RE_PARA = /^(\d{1,2})\s+(?=\S)(.{40,})$/s, RE_Q = /^(\d{1,2}(?:\s*[-–,]\s*\d{1,2})*)\.\s+(.+)$/s;
+const RE_PARA = /^(\d{1,2})\s*(?=[\p{L}“"'‘(¿¡—–])(.{40,})$/su, RE_Q = /^(\d{1,2}(?:\s*[-–,]\s*\d{1,2})*)\.\s+(.+)$/s;
 function splitLines(t){
-  const L = t.replace(/\r/g, "").split(/\n+/).map(s => s.replace(/\s+/g, " ").replace(/[ꞌ’ʼ]/g, "'").trim()).filter(s => s.length > 1);
+  const R = t.replace(/\r/g, "").replace(/\u00a0/g, " ").split(/\n+/).map(s => s.replace(/\s+/g, " ").replace(/[ꞌ’ʼ]/g, "'").trim()).filter(Boolean);
+  const M = []; // número do parágrafo sozinho numa linha: junta com a linha seguinte
+  for(let i = 0; i < R.length; i++){ if(/^\d{1,2}$/.test(R[i]) && R[i + 1] && R[i + 1].length > 40 && !/^\d/.test(R[i + 1])){ M.push(R[i] + " " + R[i + 1]); i++; } else M.push(R[i]); }
+  const L = M.filter(s => s.length > 1);
   return L.filter((s, i) => s !== L[i - 1]); // título repetido
 }
 function parseArticle(text, other){
@@ -1434,8 +1440,13 @@ function addArticle(tcn, pt){
   const title = (T.find(b => b.t === "title") || T[0] || {s:"Artigo"}).s;
   const ptitle = (P.find(b => b.t === "title") || {}).s || "";
   const kick = (T.find(b => b.t === "kick") || P.find(b => b.t === "kick") || {}).s || "";
-  const a = {id: Date.now().toString(36), title, ptitle, kick, blocks:T, at:today()};
+  const a = {id: Date.now().toString(36), title, ptitle, kick, blocks:T, at:today(), raw:{t:tcn, p:pt}, pv:PARSE_V, ans:{}};
   LEIT.arts.unshift(a); saveLeit(); return a;
+}
+const PARSE_V = 2;
+function reparse(a){
+  const n = addArticle(a.raw.t, a.raw.p); LEIT.arts.shift();
+  Object.assign(a, {title:n.title, ptitle:n.ptitle, kick:n.kick, blocks:n.blocks, pv:PARSE_V}); saveLeit();
 }
 
 /* ---------- aba ---------- */
@@ -1481,6 +1492,7 @@ function wordsHTML(s){
     return `${lead}<span class="w${a.known ? "" : " nf"}" data-w="${esc(w)}">${esc(w)}</span>${m.slice(lead.length + w.length)}`;
   });
 }
+const ansBox = b => `<textarea class="ans" data-ans="${esc(b.key)}" rows="2" placeholder="Curü ngãü̃ · Sua resposta" aria-label="Sua resposta">${esc((RART.ans || {})[b.key] || "")}</textarea>`;
 function blockHTML(b, i, mode){
   const pt = mode === "lado" && b.pt ? `<span class="ptl">${esc(b.pt)}</span>` : "";
   const del = `<button class="delb" data-del="${i}" aria-label="Apagar esta linha">✕</button>`;
@@ -1493,9 +1505,9 @@ function blockHTML(b, i, mode){
     case "focusk": return `<div class="focus" ${A}>${del}<b>${W}</b>${pt}</div>`;
     case "focus": return `<div class="focus" ${A}>${del}${W}${pt}</div>`;
     case "h": return `<h2 ${A}>${del}${W}${pt}</h2>`;
-    case "q": return `<div class="jq" ${A}>${del}<span class="qn">${esc(b.n)}.</span>${W}${pt}</div>`;
-    case "p": return `<p ${A}>${del}${b.n ? `<span class="pn">${esc(b.n)}</span>` : ""}${W}${pt}</p>`;
-    case "li": return `<ul ${A}><li>${del}${W}${pt}</li></ul>`;
+    case "q": return `<div class="jq" ${A}>${del}<span class="qn">${esc(b.n)}.</span>${W}${pt}</div>${ansBox(b)}`;
+    case "p": return `<p ${A}>${del}${b.n && b.key === "p" + b.n && !b.hideN ? `<span class="pn">${esc(b.n)}</span>` : ""}${W}${pt}</p>`;
+    case "li": return `<ul ${A}><li>${del}${W}${pt}</li></ul>${ansBox(b)}`;
     case "cap": return `<p class="cap" ${A}>${del}${W}${pt}</p>`;
     default: { const m = b.s.match(/^([a-z*])\s+(.*)$/s); return `<p class="small" ${A}>${del}${m ? `<b>${esc(m[1])}</b> ` + wordsHTML(m[2]) : W}${pt}</p>`; }
   }
@@ -1521,6 +1533,7 @@ function renderReader(){
     if(b.dataset.sure){ LEIT.arts = LEIT.arts.filter(x => x.id !== a.id); saveLeit(); closeReader(); return; }
     b.dataset.sure = "1"; b.textContent = "Toque de novo para apagar";
   };
+  $("#jw").oninput = e => { const t = e.target.closest(".ans"); if(t){ a.ans[t.dataset.ans] = t.value; clearTimeout(t._s); t._s = setTimeout(saveLeit, 400); } };
   $("#jw").onclick = e => {
     const d = e.target.closest("[data-del]");
     if(d){ e.stopPropagation(); const y = $("#rbody").scrollTop; a.blocks.splice(+d.dataset.del, 1); saveLeit(); renderReader(); $("#jw").classList.add("edit"); $("#redit").setAttribute("aria-pressed", "true"); $("#rbody").scrollTop = y; return; }
@@ -1528,7 +1541,7 @@ function renderReader(){
     if(w && !$("#jw").classList.contains("edit")) openWord(w);
   };
 }
-function openReader(id){ RART = LEIT.arts.find(a => a.id === id); if(!RART) return; renderReader(); $("#rbody").scrollTop = 0; }
+function openReader(id){ RART = LEIT.arts.find(a => a.id === id); if(!RART) return; if(RART.raw && RART.pv !== PARSE_V) reparse(RART); if(!RART.ans) RART.ans = {}; renderReader(); $("#rbody").scrollTop = 0; }
 function closeReader(){ $("#reader").hidden = true; $("#wsheet").hidden = true; RART = null; render(); }
 
 let WSEL = null;
