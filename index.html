@@ -200,6 +200,12 @@ a{color:var(--river)}
 .askbtn{margin-left:auto;display:none;align-items:center;gap:6px;border:2px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 12px;font:inherit;font-weight:700;font-size:.9rem;cursor:pointer}
 .askbtn svg{width:18px;height:18px}
 .chat-on .askbtn{display:inline-flex}
+.favbtn{flex:0 0 auto;width:36px;height:36px;border-radius:999px;border:2px solid var(--line);background:var(--surface);color:var(--muted);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.favbtn svg{width:20px;height:20px}
+.favbtn[aria-pressed="true"]{color:var(--gold);border-color:var(--gold)}
+.favbtn.sm{width:32px;height:32px;border-width:0;background:none}
+.dict li.hasfav{position:relative;padding-right:40px}
+.dict li.hasfav .favbtn{position:absolute;right:4px;top:6px}
 .askbtn.lask{margin-left:0;width:36px;height:36px;padding:0;justify-content:center;font-size:1.1rem;font-weight:800}
 .asklink{display:none;margin-top:8px;background:none;border:0;padding:0;color:inherit;font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
 .chat-on .asklink{display:inline-block}
@@ -353,6 +359,23 @@ function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || {}; }catch
 let S = Object.assign({done:{}, xp:0, streak:{n:0,last:null}, stats:{}, unlockAll:false, strict:false, games:{}}, load());
 if(!S.games) S.games = {};
 if(!S.epoch) S.epoch = 1;
+if(!S.fav) S.fav = {};
+// favoritas: chave pelo texto em ticuna (não muda quando as lições são remontadas); valor = hora (+ marcada, − desmarcada)
+const favKey = it => it.kind + "|" + norm(it.tcn);
+const isFav = it => it && it.tcn && (S.fav[favKey(it)] || 0) > 0;
+function toggleFav(it){ const k = favKey(it); S.fav[k] = isFav(it) ? -Date.now() : Date.now(); save(); return isFav(it); }
+function favItems(){ const seen = new Set(), out = []; ALL.forEach(it => { const k = favKey(it); if((S.fav[k] || 0) > 0 && !seen.has(k)){ seen.add(k); out.push(it); } }); return out; }
+const STAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
+const STAR0 = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="m12 2.5 2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>';
+const favBtn = (it, cls="") => `<button class="favbtn ${cls}" type="button" data-fav="${esc(it.id)}" aria-pressed="${isFav(it)}" aria-label="${isFav(it) ? "Tirar das favoritas" : "Favoritar"}">${isFav(it) ? STAR : STAR0}</button>`;
+function bindFav(root){
+  root.querySelectorAll("[data-fav]").forEach(b => b.onclick = e => {
+    e.stopPropagation();
+    const it = ALL.find(x => x.id === b.dataset.fav); if(!it) return;
+    const on = toggleFav(it);
+    document.querySelectorAll(`[data-fav="${CSS.escape(it.id)}"]`).forEach(x => { x.setAttribute("aria-pressed", on); x.setAttribute("aria-label", on ? "Tirar das favoritas" : "Favoritar"); x.innerHTML = on ? STAR : STAR0; });
+  });
+}
 function save(){ S.t = Date.now(); try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} if(window.syncPush) syncPush(); }
 
 /* ---------- utilidades ---------- */
@@ -419,7 +442,7 @@ function render(){
   renderHeader();
   const m = $("#main");
   if(TAB==="trilha") m.innerHTML = viewTrilha();
-  if(TAB==="treino") m.innerHTML = viewTreino();
+  if(TAB==="treino") { m.innerHTML = viewTreino(); bindFav(m); }
   if(TAB==="jogos") { m.innerHTML = viewJogos(); bindJogos(); }
   if(TAB==="leit") { m.innerHTML = viewLeitura(); bindLeitura(); }
   if(TAB==="dic") { m.innerHTML = viewDic(); bindDic(); }
@@ -457,6 +480,13 @@ function viewTreino(){
   const seen = ALL.filter(it => S.stats[it.id]);
   const weak = seen.filter(it => S.stats[it.id].wrong > 0).sort((a,b)=>S.stats[b.id].wrong - S.stats[a.id].wrong);
   let h = `<h2 class="sec">Revisar</h2><p class="lead">Treino com o que você já viu. Os itens que você mais erra aparecem primeiro.</p>`;
+  const favs = favItems();
+  h += `<div class="card"><h3 style="display:flex;align-items:center;gap:8px"><span style="color:var(--gold);display:inline-flex;width:22px">${STAR}</span>Favoritas</h3>`;
+  if(favs.length){
+    h += `<p>${favs.length} ${favs.length === 1 ? "palavra ou frase marcada" : "palavras e frases marcadas"}.</p><button class="btn" data-review="fav" style="margin:4px 0 10px">Revisar favoritas</button>
+      <ul class="dict">${favs.map(it => `<li class="hasfav">${favBtn(it, "sm")}<div class="row"><span class="tcn">${esc(it.tcn)}</span><span class="pt">${esc(it.pt)}</span></div></li>`).join("")}</ul>`;
+  } else h += `<p>Toque na estrelinha no alto da lição, ou ao lado de uma palavra no Dicionário, para guardar aqui o que você quer revisar.</p>`;
+  h += `</div>`;
   if(!seen.length) return h + `<div class="card"><h3>Nada para revisar ainda</h3><p>Faça a primeira lição da trilha e volte aqui.</p><button class="btn" data-go="trilha" style="margin:8px 0 0">Ir para a trilha</button></div>`;
   h += `<div class="stats" style="justify-content:flex-start;margin:6px 0 16px"><div class="stat"><b>${seen.length}</b>vistos</div><div class="stat"><b>${weak.length}</b>com erros</div></div>`;
   h += `<button class="btn" data-review="weak" style="margin:0 0 10px">Treinar meus erros</button> <button class="btn ghost" data-review="mix">Revisão geral</button>`;
@@ -482,14 +512,14 @@ function dicList(){
   const list = ALL.filter(it => (DU==="all"||it.unit===DU) && (!q || bare(it.tcn).includes(q) || bare(it.pt).includes(q)));
   let h = `<div class="count">${list.length} itens</div><ul class="dict">`;
   list.forEach(it => {
-    h += `<li><div class="row"><span class="tcn">${esc(it.tcn)}</span><span class="pt">${esc(it.pt)}</span></div>`;
+    h += `<li class="hasfav">${favBtn(it, "sm")}<div class="row"><span class="tcn">${esc(it.tcn)}</span><span class="pt">${esc(it.pt)}</span></div>`;
     if(it.note) h += `<span class="count">${esc(it.note)}</span>`;
     h += `<span><span class="src ${it.src==="WEB"?"web":""}" title="${esc(SRC[it.src])}">${esc(SRC[it.src])}</span></span></li>`;
   });
   return h + `</ul>`;
 }
 function bindDic(){
-  const draw = () => $("#dlist").innerHTML = dicList();
+  const draw = () => { $("#dlist").innerHTML = dicList(); bindFav($("#dlist")); };
   draw();
   $("#dq").oninput = e => { DQ = e.target.value; draw(); };
   document.querySelectorAll("[data-du]").forEach(b => b.onclick = () => { DU = b.dataset.du; document.querySelectorAll("[data-du]").forEach(c=>c.setAttribute("aria-pressed", c===b)); draw(); });
@@ -521,7 +551,7 @@ function bindGram(){
   $("#setStrict").onchange = e => { S.strict = e.target.checked; save(); };
   if($("#fbOut")) $("#fbOut").onclick = () => window.fbSignOut();
   $("#resetBtn").onclick = () => $("#resetAsk").hidden = false;
-  $("#resetYes").onclick = () => { S = {done:{}, xp:0, streak:{n:0,last:null}, stats:{}, unlockAll:false, strict:false, games:{}, epoch:Date.now()}; save(); render(); };
+  $("#resetYes").onclick = () => { S = {done:{}, xp:0, streak:{n:0,last:null}, stats:{}, unlockAll:false, strict:false, games:{}, fav:{}, epoch:Date.now()}; save(); render(); };
 }
 
 function bindCommon(){
@@ -535,6 +565,7 @@ function bindCommon(){
   document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => setTab(b.dataset.go));
   document.querySelectorAll("[data-review]").forEach(b => b.onclick = () => {
     const seen = ALL.filter(it => S.stats[it.id]);
+    if(b.dataset.review === "fav"){ const f = favItems(); if(f.length) startLesson(shuffle(f).slice(0, 10), null); return; }
     let items = b.dataset.review==="weak"
       ? seen.filter(it=>S.stats[it.id].wrong>0).sort((a,b)=>(S.stats[b.id].wrong-S.stats[b.id].right*.3)-(S.stats[a.id].wrong-S.stats[a.id].right*.3)).slice(0,8)
       : pick(seen, 8);
@@ -644,10 +675,11 @@ function shell(inner, footer){
   const doneEx = LS.queue.slice(0, LS.pos).filter(e=>e.t!=="intro"&&e.t!=="explain").length;
   const pct = Math.min(100, Math.round(100 * doneEx / Math.max(1, LS.queue.filter(e=>e.t!=="intro"&&e.t!=="explain").length)));
   $("#lessonRoot").innerHTML = `<div class="lesson" role="dialog" aria-label="Lição">
-    <div class="lbar"><button class="x" id="quit" aria-label="Sair da lição">${IC.x}</button><div class="prog" aria-hidden="true"><i style="width:${pct}%"></i></div><button class="askbtn lask" id="askLesson" type="button" aria-label="Tirar dúvida sobre este exercício">?</button></div>
+    <div class="lbar"><button class="x" id="quit" aria-label="Sair da lição">${IC.x}</button><div class="prog" aria-hidden="true"><i style="width:${pct}%"></i></div>${(() => { const e = LS.queue[LS.pos] || {}; return e.it && e.it.id && e.it.tcn ? favBtn(e.it) : ""; })()}<button class="askbtn lask" id="askLesson" type="button" aria-label="Tirar dúvida sobre este exercício">?</button></div>
     <div class="lbody pop">${inner}</div>
     <div class="lfoot" id="foot"><div class="in">${footer}</div></div></div>`;
   $("#quit").onclick = closeLesson;
+  bindFav($("#lessonRoot"));
   // a qualquer momento da lição: abre o chat com a palavra ou frase deste exercício
   $("#askLesson").onclick = () => { const e = LS.queue[LS.pos] || {}; openChat(e.it && e.it.tcn ? e.it : (e.items && e.items[0]) || null); };
 }
@@ -1111,6 +1143,8 @@ function mergeState(a, b){
   const newer = (a.t||0) >= (b.t||0) ? a : b;
   m.unlockAll = !!newer.unlockAll; m.strict = !!newer.strict;
   m.done = Object.assign({}, b.done, a.done);
+  m.fav = Object.assign({}, b.fav);
+  for(const [k, v] of Object.entries(a.fav||{})) if(Math.abs(v) > Math.abs(m.fav[k] || 0)) m.fav[k] = v;
   m.xp = Math.max(a.xp||0, b.xp||0);
   const sa = a.streak||{}, sb = b.streak||{};
   m.streak = (sa.last||"") > (sb.last||"") ? sa : (sb.last||"") > (sa.last||"") ? sb : ((sa.n||0) >= (sb.n||0) ? sa : sb);
@@ -1133,7 +1167,7 @@ const canon = o => JSON.stringify(o, (k, v) => v && typeof v === "object" && !Ar
   if(!uid) return;
   const ref = db.doc("data/users/" + uid + "/progress");
   if(window.__foreignLocal){ // outra pessoa usou este aparelho antes: não misturar o progresso
-    S = {done:{}, xp:0, streak:{n:0,last:null}, stats:{}, unlockAll:false, strict:false, games:{}, epoch:1};
+    S = {done:{}, xp:0, streak:{n:0,last:null}, stats:{}, unlockAll:false, strict:false, games:{}, fav:{}, epoch:1};
     try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
     render();
   }
@@ -1150,7 +1184,7 @@ const canon = o => JSON.stringify(o, (k, v) => v && typeof v === "object" && !Ar
   function absorb(remote){
     const before = canon(S);
     S = mergeState(S, remote);
-    if(!S.games) S.games = {};
+    if(!S.games) S.games = {}; if(!S.fav) S.fav = {};
     try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){}
     if(canon(S) !== before && !LS && !GS) render();
     if(canon(S) !== canon(remote)) window.syncPush();
