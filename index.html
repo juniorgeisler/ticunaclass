@@ -298,6 +298,29 @@ nav.tabs .in.six button{font-size:.68rem;padding-inline:2px}
 .dot{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:-1px}
 #wsheet{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--jw-bg);color:var(--jw-ink);border-top-left-radius:16px;border-top-right-radius:16px;box-shadow:0 -6px 24px rgba(0,0,0,.18);max-height:70vh;overflow:auto;padding:8px 18px calc(16px + env(safe-area-inset-bottom));font-family:"Noto Sans","Segoe UI",Roboto,sans-serif}
 #reader[hidden],#wsheet[hidden]{display:none}
+:root{--sec-gem:#2A6B77;--sec-wheat:#9B6D17;--sec-sheep:#942926}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--sec-gem:#6FB7C4;--sec-wheat:#E0B04F;--sec-sheep:#E57A72}}
+:root[data-theme="dark"]{--sec-gem:#6FB7C4;--sec-wheat:#E0B04F;--sec-sheep:#E57A72}
+.jw .wdate{font-size:1.3em;font-weight:700;color:var(--jw-muted);margin:0 0 6px;line-height:1.3}
+.jw .wread{font-size:.95em;font-weight:700;color:var(--sec-gem);margin:0 0 20px;padding-bottom:16px;border-bottom:1px solid var(--jw-line)}
+.jw .wsong{display:flex;gap:8px;align-items:baseline;font-weight:600;font-size:.95em;margin:0 0 22px}
+.jw .wsong svg{width:1em;height:1em;flex:0 0 auto;color:var(--jw-muted);align-self:center}
+.jw .wsec{display:flex;align-items:center;gap:12px;font-size:1.3em;line-height:1.25;font-weight:800;margin:34px 0 18px;color:var(--sec)}
+.jw .wsec .ico{flex:0 0 auto;width:34px;height:34px;border-radius:4px;background:var(--sec);color:var(--jw-bg);display:inline-flex;align-items:center;justify-content:center}
+.jw .wsec .ico svg{width:22px;height:22px}
+.jw .wpart{font-weight:700;color:var(--sec);margin:22px 0 2px;font-size:1em;line-height:1.5}
+.jw .time{color:var(--jw-muted);margin:0 0 10px;font-size:.92em}
+.jw .wp{margin:0 0 14px 1.2em}
+.jw .wli{margin:0 0 10px 1.2em;display:flex;gap:8px}
+.jw .wli::before{content:"•";color:var(--jw-muted)}
+.jw .wans{margin-left:1.2em;width:calc(100% - 1.2em)}
+.jw .bh{font-weight:800;text-transform:uppercase;font-size:.95em;margin:0 0 10px;color:var(--jw-head)}
+.jw aside.box p{margin:0 0 12px}
+.wk{margin:6px 0 20px}
+.wk h3{font-family:var(--f-display);margin:0 0 8px;font-size:1.05rem;display:flex;align-items:center;gap:8px}
+.wk h3 .now{font-family:var(--f-body);font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;background:var(--river);color:var(--river-ink);border-radius:999px;padding:2px 8px}
+.libcard .cover.wb{background:linear-gradient(160deg,#3B8796,#1F5560)}
+details.oldwk summary{cursor:pointer;font-weight:700;margin:10px 0}
 #wsheet .grab{width:40px;height:4px;border-radius:2px;background:var(--jw-line);margin:4px auto 10px}
 #wsheet .in{max-width:640px;margin:0 auto}
 #wsheet .big{font-size:1.7rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -336,7 +359,7 @@ body.chat-on #wsheet .acts button.ai{display:inline-block}
   <button data-tab="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 20c0-4 12-4 12-8S6 8 6 4"/><circle cx="6" cy="4" r="1.6" fill="currentColor"/><circle cx="6" cy="20" r="1.6" fill="currentColor"/></svg>Trilha</button>
   <button data-tab="treino"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Revisar</button>
   <button data-tab="jogos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7.5 10.5v4M5.5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="17.5" cy="13.8" r="1" fill="currentColor"/></svg>Jogos</button>
-  <button data-tab="leit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5z"/><path d="M12 6v14"/></svg>Sentinela</button>
+  <button data-tab="leit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5z"/><path d="M12 6v14"/></svg>Reuniões</button>
   <button data-tab="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>Dicionário</button>
   <button data-tab="gram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Gramática</button>
 </div></nav>
@@ -1492,7 +1515,7 @@ function viewLeitura(){
     <label for="ppt">Texto em português (opcional, para comparar)</label><textarea id="ppt" placeholder="Cole aqui o mesmo artigo em português"></textarea>
     <div class="row2"><button class="btn" id="pgo">Montar artigo</button><button class="btn ghost" id="pcancel">Cancelar</button></div>
     <p class="lead" style="margin-top:12px">Pode vir com menu e rodapé do site junto: a página tenta limpar sozinha, e depois você ainda pode apagar alguma linha que sobrar. O texto fica salvo só neste aparelho.</p></div>`;
-  let h = `<h2 class="sec">A Sentinela</h2><p class="lead">Toque em qualquer palavra do artigo para ver a tradução e as partes: <span class="k-pre" style="padding:0 4px;border-radius:4px">prefixo</span> <span class="k-raiz" style="padding:0 4px;border-radius:4px">raiz</span> <span class="k-suf" style="padding:0 4px;border-radius:4px">sufixo</span>.</p>
+  let h = `<h2 class="sec">Reuniões</h2>${viewWeeks()}<h2 class="sec" style="margin-top:28px">Seus artigos</h2><p class="lead">Toque em qualquer palavra para ver a tradução e as partes: <span class="k-pre" style="padding:0 4px;border-radius:4px">prefixo</span> <span class="k-raiz" style="padding:0 4px;border-radius:4px">raiz</span> <span class="k-suf" style="padding:0 4px;border-radius:4px">sufixo</span>.</p>
     <button class="btn" id="ladd" style="width:100%">+ Adicionar artigo do jw.org</button><div class="lib">`;
   LEIT.arts.forEach(a => {
     h += `<button class="libcard" data-art="${a.id}"><span class="cover">A SENTINELA<br>ESTUDO</span><span class="meta"><span class="k">${esc(a.kick || "Artigo de estudo")}</span><div class="t tcn">${esc(a.title)}</div>${a.ptitle ? `<div class="p">${esc(a.ptitle)}</div>` : ""}</span></button>`;
@@ -1500,7 +1523,30 @@ function viewLeitura(){
   if(!LEIT.arts.length) h += `<p class="lead">Nenhum artigo ainda. Comece pelo artigo "Pregando as boas novas em todas as línguas das nações".</p>`;
   return h + `</div>`;
 }
+// semanas de reunião que vêm junto com o app (só no link do Claude): apostila + Sentinela
+const WEEKS = (DB.reunioes || []).slice().sort((a, b) => b.week.localeCompare(a.week));
+function isoWeek(d){ const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())); const day = t.getUTCDay() || 7; t.setUTCDate(t.getUTCDate() + 4 - day); const y = t.getUTCFullYear(); return y + "-" + String(Math.ceil(((t - Date.UTC(y, 0, 1)) / 864e5 + 1) / 7)).padStart(2, "0"); }
+function weekCards(w){
+  return w.docs.map(d => `<button class="libcard" data-doc="${esc(w.week + ":" + d.kind)}"><span class="cover ${d.kind === "apostila" ? "wb" : ""}">${d.kind === "apostila" ? "VIDA E<br>MINISTÉRIO" : "A SENTINELA<br>ESTUDO"}</span><span class="meta"><span class="k">${d.kind === "apostila" ? "Apostila da reunião" : "Estudo de A Sentinela"}</span><div class="t tcn">${esc(d.kind === "apostila" ? ((d.blocks.find(b => b.t === "wread") || {}).s || d.title) : d.title)}</div>${(() => { const r = d.blocks.find(b => b.t === (d.kind === "apostila" ? "wread" : "title")) || {}; return r.pt && r.pt !== r.s ? `<div class="p">${esc(r.pt)}</div>` : ""; })()}</span></button>`).join("");
+}
+function viewWeeks(){
+  if(!WEEKS.length) return `<p class="lead">A apostila e a Sentinela de cada semana aparecem aqui no link do Claude. Aqui você pode colar um artigo do jw.org.</p>`;
+  const now = isoWeek(new Date());
+  const cur = WEEKS.find(w => w.week === now) || WEEKS.find(w => w.week < now) || WEEKS[WEEKS.length - 1];
+  let h = `<div class="wk"><h3>${esc(cur.plabel || cur.label)}${cur.week === now ? '<span class="now">Esta semana</span>' : ""}</h3><div class="lib">${weekCards(cur)}</div></div>`;
+  const rest = WEEKS.filter(w => w !== cur);
+  if(rest.length) h += `<details class="oldwk"><summary>Outras semanas</summary>${rest.map(w => `<div class="wk"><h3>${esc(w.plabel || w.label)}</h3><div class="lib">${weekCards(w)}</div></div>`).join("")}</details>`;
+  return h;
+}
+function openDoc(key){
+  const [wk, kind] = key.split(":");
+  const w = WEEKS.find(x => x.week === wk); const d = w && w.docs.find(x => x.kind === kind); if(!d) return;
+  if(!LEIT.ans) LEIT.ans = {};
+  RART = {id:key, builtin:true, kind, title:d.title, blocks:d.blocks, ans: LEIT.ans[key] || (LEIT.ans[key] = {})};
+  renderReader(); $("#rbody").scrollTop = 0;
+}
 function bindLeitura(){
+  document.querySelectorAll("[data-doc]").forEach(b => b.onclick = () => openDoc(b.dataset.doc));
   const add = $("#ladd"); if(add) add.onclick = () => { LVIEW = "paste"; render(); };
   document.querySelectorAll("[data-art]").forEach(b => b.onclick = () => openReader(b.dataset.art));
   const go = $("#pgo"); if(go) go.onclick = () => {
@@ -1526,12 +1572,26 @@ function wordsHTML(s){
     return `${lead}<span class="w${a.known ? "" : " nf"}" data-w="${esc(w)}">${esc(w)}</span>${m.slice(lead.length + w.length)}`;
   });
 }
-const ansBox = b => `<textarea class="ans" data-ans="${esc(b.key)}" rows="2" placeholder="Curü ngãü̃ · Sua resposta" aria-label="Sua resposta">${esc((RART.ans || {})[b.key] || "")}</textarea>`;
+const ICS = {
+  gem:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4h10l4 5-9 11L3 9z"/></svg>',
+  wheat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 21V8"/><path d="M12 12c-3 0-5-2-5-5 3 0 5 2 5 5zm0 0c3 0 5-2 5-5-3 0-5 2-5 5zm0 5c-3 0-5-2-5-5 3 0 5 2 5 5zm0 0c3 0 5-2 5-5-3 0-5 2-5 5zM12 7c-1.5-1-1.5-3 0-4 1.5 1 1.5 3 0 4z"/></svg>',
+  sheep:'<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="10" r="3.2"/><circle cx="13.5" cy="9" r="3.2"/><circle cx="16" cy="12.5" r="3"/><circle cx="11" cy="13.5" r="3.4"/><rect x="9" y="16" width="1.8" height="4" rx=".9"/><rect x="14" y="16" width="1.8" height="4" rx=".9"/><circle cx="6" cy="12" r="2.2"/></svg>'};
+const ansBox = (b, cls = "") => (RART.builtin && !b.a) ? "" : `<textarea class="ans ${cls}" data-ans="${esc(b.key || b.pid)}" rows="2" placeholder="Curü ngãü̃ · Sua resposta" aria-label="Sua resposta">${esc((RART.ans || {})[b.key || b.pid] || "")}</textarea>`;
 function blockHTML(b, i, mode){
   const pt = mode === "lado" && b.pt ? `<span class="ptl">${esc(b.pt)}</span>` : "";
   const del = `<button class="delb" data-del="${i}" aria-label="Apagar esta linha">✕</button>`;
   const W = wordsHTML(b.s), A = `data-b="${i}"`;
+  const S2 = b.c ? ` style="--sec:var(--sec-${b.c})"` : "";
   switch(b.t){
+    case "wdate": return `<div class="wdate" ${A}>${W}${pt}</div>`;
+    case "wread": return `<div class="wread" ${A}>${W}${pt}</div>`;
+    case "wsong": return `<div class="wsong" ${A}${S2}>${ICN.note}<span>${W}${pt}</span></div>`;
+    case "wsec": return `<h2 class="wsec" ${A}${S2}><span class="ico">${ICS[b.c] || ""}</span><span>${W}${pt}</span></h2>`;
+    case "wpart": return `<h3 class="wpart" ${A}${S2}>${W}${pt}</h3>`;
+    case "time": return `<div class="time" ${A}>${W}${pt}</div>`;
+    case "wp": return `<p class="wp" ${A}>${W}${pt}</p>`;
+    case "bh": return `<div class="bh" ${A}>${W}${pt}</div>`;
+    case "bp": return `<p class="wp" ${A}>${W}${pt}</p>${ansBox(b, "wans")}`;
     case "kick": return `<div class="kick" ${A}>${del}${W}${pt}</div>`;
     case "song": return `<div class="song" ${A}>${del}${ICN.note}<span>${W}${pt}</span></div>`;
     case "title": return `<h1 class="tcn" ${A}>${del}${W}${mode === "lado" && b.pt ? `<span class="ptl" style="font-size:.6em;font-weight:500">${esc(b.pt)}</span>` : ""}</h1>`;
@@ -1540,8 +1600,8 @@ function blockHTML(b, i, mode){
     case "focus": return `<div class="focus" ${A}>${del}${W}${pt}</div>`;
     case "h": return `<h2 ${A}>${del}${W}${pt}</h2>`;
     case "q": return `<div class="jq" ${A}>${del}<span class="qn">${esc(b.n)}.</span>${W}${pt}</div>${ansBox(b)}`;
-    case "p": return `<p ${A}>${del}${b.n && b.key === "p" + b.n && !b.hideN ? `<span class="pn">${esc(b.n)}</span>` : ""}${W}${pt}</p>`;
-    case "li": return `<ul ${A}><li>${del}${W}${pt}</li></ul>${ansBox(b)}`;
+    case "p": return `<p ${A}>${del}${b.n && (b.key === "p" + b.n || RART.builtin) && !b.hideN ? `<span class="pn">${esc(b.n)}</span>` : ""}${W}${pt}</p>`;
+    case "li": return RART.builtin ? `<div class="wli" ${A}><span>${W}${pt}</span></div>${ansBox(b, "wans")}` : `<ul ${A}><li>${del}${W}${pt}</li></ul>${ansBox(b)}`;
     case "cap": return `<p class="cap" ${A}>${del}${W}${pt}</p>`;
     default: { const m = b.s.match(/^([a-z*])\s+(.*)$/s); return `<p class="small" ${A}>${del}${m ? `<b>${esc(m[1])}</b> ` + wordsHTML(m[2]) : W}${pt}</p>`; }
   }
@@ -1549,25 +1609,25 @@ function blockHTML(b, i, mode){
 function renderReader(){
   const a = RART, mode = LEIT.mode || "tcn";
   const r = $("#reader");
-  r.innerHTML = `<div class="rbar"><button class="ib" id="rback" aria-label="Voltar">${ICN.back}</button><span class="rt">A Sentinela</span>
+  r.innerHTML = `<div class="rbar"><button class="ib" id="rback" aria-label="Voltar">${ICN.back}</button><span class="rt">${a.kind === "apostila" ? "Vida e Ministério" : "A Sentinela"}</span>
     <button class="ib" id="rmode" aria-pressed="${mode === "lado"}" title="Mostrar o português embaixo de cada parágrafo">PT</button>
     <button class="ib" id="rminus" aria-label="Letra menor">A−</button><button class="ib" id="rplus" aria-label="Letra maior">A+</button>
-    <button class="ib" id="redit" aria-pressed="false" title="Apagar linhas que sobraram do site">✎</button></div>
+    ${a.builtin ? "" : `<button class="ib" id="redit" aria-pressed="false" title="Apagar linhas que sobraram do site">✎</button>`}</div>
     <div class="rbody" id="rbody"><article class="jw" id="jw" style="--jw-fs:${LEIT.fs || 18}px">${a.blocks.map((b, i) => blockHTML(b, i, mode)).join("")}
     <div class="legend"><span><i class="dot k-pre" style="background:var(--pre)"></i>prefixo</span><span><i class="dot" style="background:var(--raiz)"></i>raiz</span><span><i class="dot" style="background:var(--suf)"></i>sufixo</span><span>palavra sublinhada = ainda sem tradução</span></div>
-    <div style="margin-top:28px"><button class="btn ghost" id="rdelart">Apagar este artigo</button></div></article></div>`;
+    ${a.builtin ? "" : `<div style="margin-top:28px"><button class="btn ghost" id="rdelart">Apagar este artigo</button></div>`}</article></div>`;
   r.hidden = false;
   $("#rback").onclick = closeReader;
   $("#rmode").onclick = () => { LEIT.mode = mode === "lado" ? "tcn" : "lado"; saveLeit(); const y = $("#rbody").scrollTop; renderReader(); $("#rbody").scrollTop = y; };
   $("#rminus").onclick = () => { LEIT.fs = Math.max(14, (LEIT.fs || 18) - 2); saveLeit(); $("#jw").style.setProperty("--jw-fs", LEIT.fs + "px"); };
   $("#rplus").onclick = () => { LEIT.fs = Math.min(28, (LEIT.fs || 18) + 2); saveLeit(); $("#jw").style.setProperty("--jw-fs", LEIT.fs + "px"); };
-  $("#redit").onclick = e => { const on = $("#jw").classList.toggle("edit"); e.currentTarget.setAttribute("aria-pressed", on); };
-  $("#rdelart").onclick = () => {
+  if(!a.builtin) $("#redit").onclick = e => { const on = $("#jw").classList.toggle("edit"); e.currentTarget.setAttribute("aria-pressed", on); };
+  if(!a.builtin) $("#rdelart").onclick = () => {
     const b = $("#rdelart");
     if(b.dataset.sure){ LEIT.arts = LEIT.arts.filter(x => x.id !== a.id); saveLeit(); closeReader(); return; }
     b.dataset.sure = "1"; b.textContent = "Toque de novo para apagar";
   };
-  $("#jw").oninput = e => { const t = e.target.closest(".ans"); if(t){ a.ans[t.dataset.ans] = t.value; clearTimeout(t._s); t._s = setTimeout(saveLeit, 400); } };
+  $("#jw").oninput = e => { const t = e.target.closest(".ans"); if(t){ if(!a.ans) a.ans = {}; a.ans[t.dataset.ans] = t.value; clearTimeout(t._s); t._s = setTimeout(saveLeit, 400); } };
   $("#jw").onclick = e => {
     const d = e.target.closest("[data-del]");
     if(d){ e.stopPropagation(); const y = $("#rbody").scrollTop; a.blocks.splice(+d.dataset.del, 1); saveLeit(); renderReader(); $("#jw").classList.add("edit"); $("#redit").setAttribute("aria-pressed", "true"); $("#rbody").scrollTop = y; return; }
