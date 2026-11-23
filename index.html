@@ -25,7 +25,7 @@
   --urucum:#EE7344; --gold:#F0BE4C;
   --ok:#5CC782; --ok-bg:#163525; --bad:#F07B76; --bad-bg:#3B1B1B; --locked:#33443E; color-scheme:dark}
 html,body{height:100%}
-body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5}
 *{box-sizing:border-box}
 button{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--urucum);outline-offset:2px}
@@ -231,6 +231,82 @@ a{color:var(--river)}
 .hintbtn:disabled{opacity:.5;cursor:default}
 .hintmask{font-size:1.1rem;letter-spacing:.06em}
 .spellline .tile{margin-right:-4px}
+
+/* ---------- visual novo: tinta de jenipapo + urucum ----------
+   Layout: cabeçalho escuro de jenipapo que continua no painel da tela inicial; dock de abas flutuante;
+   o laranja do urucum só no que é ação principal. A aba Reuniões (leitor .jw) não muda. */
+:root{--deep:#10272B;--deep-2:#183A3F;--on-deep:#EEF5F2;--on-deep-mut:#A9C2BC;--urucum:#D2491E;--tucuma:#E9A21C;--pat:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44' viewBox='0 0 44 44'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.075' stroke-width='1.6'%3E%3Cpath d='M22 2 42 22 22 42 2 22Z'/%3E%3Cpath d='M22 11 33 22 22 33 11 22Z'/%3E%3C/g%3E%3Ccircle cx='22' cy='22' r='2.2' fill='%23ffffff' fill-opacity='.1'/%3E%3C/svg%3E")}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--deep:#0A1A1D;--deep-2:#14302F;--on-deep:#EAF3EF;--on-deep-mut:#93ADA6;--urucum:#EE7344;--tucuma:#F0BE4C}}
+:root[data-theme="dark"]{--deep:#0A1A1D;--deep-2:#14302F;--on-deep:#EAF3EF;--on-deep-mut:#93ADA6;--urucum:#EE7344;--tucuma:#F0BE4C}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--deep)}
+header.top{background:var(--deep) var(--pat);color:var(--on-deep);border-bottom:0}
+header.top .band{display:none}
+.topin{padding:12px 16px}
+.brand{font-size:1.35rem;color:var(--on-deep)}
+.brand span{color:var(--urucum)}
+header.top .pill{background:rgba(255,255,255,.08);border-radius:999px;padding:4px 10px 4px 8px}
+header.top .pill.streak{color:#FF9466} header.top .pill.xp{color:#F7C75A}
+header.top .askbtn{background:rgba(255,255,255,.08);color:var(--on-deep);border-color:rgba(255,255,255,.22)}
+.wrap{padding-block:0 128px}
+nav.tabs{left:0;right:0;margin-inline:auto;bottom:calc(10px + env(safe-area-inset-bottom,0px));width:calc(100% - 20px);max-width:560px;border:1px solid var(--line);border-radius:22px;
+  box-shadow:0 10px 30px rgba(9,30,28,.18),0 2px 6px rgba(9,30,28,.08);padding-bottom:0}
+nav.tabs .in.six button{padding:7px 2px 8px;font-size:.66rem;gap:3px}
+nav.tabs button svg{width:22px;height:22px;padding:4px 12px;border-radius:999px;box-sizing:content-box;transition:background .15s}
+nav.tabs button[aria-current="page"]{color:var(--urucum)}
+nav.tabs button[aria-current="page"] svg{background:color-mix(in srgb,var(--urucum) 15%,transparent)}
+h2.sec{font-size:1.85rem;letter-spacing:-.02em;margin:26px 0 6px}
+.uhead{background:var(--deep) var(--pat);color:var(--on-deep);border-radius:20px;padding:18px}
+.uhead .n{color:var(--tucuma);opacity:1}
+.uhead h3{font-size:1.4rem;letter-spacing:-.01em}
+.uhead button.tips{border-color:rgba(255,255,255,.35)}
+.uhead.jw{background:var(--urucum) var(--pat)}
+.node.current{background:var(--urucum);color:#fff;box-shadow:0 6px 0 color-mix(in srgb,var(--urucum) 60%,#000),0 0 0 7px color-mix(in srgb,var(--urucum) 22%,transparent);animation:glow 2.4s ease-in-out infinite}
+.node.current::after{color:var(--urucum)}
+@keyframes glow{50%{box-shadow:0 6px 0 color-mix(in srgb,var(--urucum) 60%,#000),0 0 0 13px color-mix(in srgb,var(--urucum) 8%,transparent)}}
+.card{border-radius:18px}
+
+/* tela inicial */
+.home{display:grid;gap:26px;padding-top:0}
+.hero{margin-inline:-16px;background:var(--deep) var(--pat);color:var(--on-deep);border-radius:0 0 30px 30px;padding:8px 20px 22px;display:grid;gap:18px}
+.hero .hi{font-family:var(--f-display);font-weight:800;font-size:clamp(2.8rem,13vw,4rem);line-height:.92;letter-spacing:-.035em;margin:6px 0 0}
+.hero .hi i{font-style:normal;color:var(--urucum)}
+.hero .sub{margin:-8px 0 0;color:var(--on-deep-mut);font-size:1rem;max-width:34ch}
+.hstats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.hstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 12px;font-variant-numeric:tabular-nums;min-width:0}
+.hstat b{display:block;font-family:var(--f-display);font-size:1.45rem;line-height:1.1;color:var(--on-deep)}
+.hstat span{font-size:.74rem;color:var(--on-deep-mut);letter-spacing:.02em}
+.cont{background:var(--deep-2);border:1px solid rgba(255,255,255,.12);border-radius:22px;padding:16px;display:grid;grid-template-columns:auto 1fr;gap:14px 16px;align-items:center}
+.ring{width:76px;height:76px;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-size:1.05rem;color:var(--on-deep)}
+.cont .k{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tucuma)}
+.cont .t{font-family:var(--f-display);font-weight:700;font-size:1.2rem;line-height:1.2;margin:2px 0;text-wrap:balance}
+.cont .u{font-size:.85rem;color:var(--on-deep-mut)}
+.cont .go{grid-column:1/-1;width:100%;margin:0;background:var(--urucum);color:#fff;box-shadow:0 4px 0 color-mix(in srgb,var(--urucum) 55%,#000)}
+.hsec{display:grid;gap:12px}
+.hsec>h3{margin:0;font-family:var(--f-display);font-size:1.25rem;letter-spacing:-.01em;display:flex;align-items:baseline;gap:10px}
+.hsec>h3 small{font-family:var(--f-body);font-size:.78rem;font-weight:600;color:var(--muted);letter-spacing:0}
+.wotd{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px;display:grid;gap:10px;position:relative}
+.wotd .word{font-size:2.3rem;line-height:1.1;display:flex;align-items:center;flex-wrap:wrap}
+.wotd .word .seg span{padding:2px 6px}
+.wotd .wpt{font-size:1.1rem}
+.wotd .parts{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.wotd .parts li{font-size:.85rem;border-radius:999px;padding:3px 10px;font-weight:600}
+.wotd .src{justify-self:start}
+.wotd .favbtn{position:absolute;top:14px;right:14px}
+.wkrow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.wkc{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:0;overflow:hidden;text-align:left;cursor:pointer;display:grid;grid-template-rows:auto 1fr;min-width:0}
+.wkc .band2{height:56px;padding:10px 12px;color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.07em;display:flex;align-items:flex-end;background:linear-gradient(160deg,#5B7DB8,#2E4A7D)}
+.wkc.wb .band2{background:linear-gradient(160deg,#3B8796,#1F5560)}
+.wkc .tx{padding:10px 12px 14px;font-weight:700;font-size:.92rem;line-height:1.3;overflow-wrap:anywhere}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tile{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:14px;text-align:left;cursor:pointer;display:grid;gap:8px;align-content:start;min-width:0}
+.tile .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff}
+.tile .ic svg{width:22px;height:22px}
+.tile b{font-family:var(--f-display);font-size:1.05rem}
+.tile span{font-size:.82rem;color:var(--muted);line-height:1.3}
+.tile:hover,.wkc:hover{border-color:color-mix(in srgb,var(--river) 45%,var(--line))}
+.closing{text-align:center;color:var(--muted);font-size:.85rem;margin:0}
 /*LEITURA-CSS*/
 /* ---------- Leitura (A Sentinela), no estilo do JW Library ---------- */
 :root{--jw-head:#37474F;--jw-box:#9E9E9E;--jw-bg:#FFFFFF;--jw-ink:#1F1F1F;--jw-muted:#6B6B6B;--jw-line:#E3E3E3;--jw-soft:#F2F2F2;--jw-accent:#4A6DA7;--jw-mark:#FFE58A;
@@ -356,9 +432,9 @@ body.chat-on #wsheet .acts button.ai{display:inline-block}
 <div id="wsheet" hidden role="dialog" aria-label="Análise da palavra"></div>
 
 <nav class="tabs" aria-label="Seções"><div class="in six">
+  <button data-tab="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>Início</button>
   <button data-tab="trilha"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 20c0-4 12-4 12-8S6 8 6 4"/><circle cx="6" cy="4" r="1.6" fill="currentColor"/><circle cx="6" cy="20" r="1.6" fill="currentColor"/></svg>Trilha</button>
   <button data-tab="treino"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>Revisar</button>
-  <button data-tab="jogos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7.5 10.5v4M5.5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="17.5" cy="13.8" r="1" fill="currentColor"/></svg>Jogos</button>
   <button data-tab="leit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 6c-2-1.5-5-2-8-1.5v14c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-14c-3-.5-6 0-8 1.5z"/><path d="M12 6v14"/></svg>Reuniões</button>
   <button data-tab="dic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>Dicionário</button>
   <button data-tab="gram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>Gramática</button>
@@ -445,7 +521,7 @@ const IC = {
 };
 
 /* ---------- abas ---------- */
-let TAB = "trilha";
+let TAB = "inicio";
 function setTab(t){
   TAB = t;
   document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-current", b.dataset.tab===t ? "page" : "false"));
@@ -454,6 +530,7 @@ function setTab(t){
 }
 document.querySelectorAll("nav.tabs button").forEach(b => b.onclick = () => setTab(b.dataset.tab));
 
+function streakN(){ const s = S.streak; let n = s.n || 0; if(s.last){ const diff = (new Date(today()) - new Date(s.last))/864e5; if(diff > 1) n = 0; } return n; }
 function renderHeader(){
   $("#xp").textContent = S.xp;
   const s = S.streak; let n = s.n || 0;
@@ -464,6 +541,7 @@ function renderHeader(){
 function render(){
   renderHeader();
   const m = $("#main");
+  if(TAB==="inicio") { m.innerHTML = viewHome(); bindHome(); }
   if(TAB==="trilha") m.innerHTML = viewTrilha();
   if(TAB==="treino") { m.innerHTML = viewTreino(); bindFav(m); }
   if(TAB==="jogos") { m.innerHTML = viewJogos(); bindJogos(); }
@@ -1328,6 +1406,67 @@ document.addEventListener("keydown", e => { if(e.key === "Escape" && !$("#chat")
 })();
 
 /*LEITURA-JS*/
+/* ---------- tela inicial ---------- */
+const HIC = {
+  rev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6"/><path d="M20 4v5h-5"/></svg>',
+  game:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="7" width="19" height="11" rx="5"/><path d="M7.5 10.5v4M5.5 12.5h4"/><circle cx="15.5" cy="11.5" r="1" fill="currentColor"/><circle cx="17.5" cy="13.8" r="1" fill="currentColor"/></svg>',
+  dic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 8h6"/></svg>',
+  gram:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M9 10v10"/></svg>',
+};
+// palavra do dia: uma palavra do curso que se divide em partes, trocando a cada dia
+function wordOfDay(){
+  if(!wordOfDay.list){
+    wordOfDay.list = ALL.filter(it => it.kind === "vocab" && !/\s/.test(it.tcn.trim()) && it.tcn.length > 3).map(it => [it, analyze(it.tcn)]).filter(([, a]) => a.parts.length > 1 && a.src !== "deduz");
+  }
+  const L = wordOfDay.list; if(!L.length) return null;
+  const d = new Date(), n = Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5);
+  return L[(n * 7919) % L.length];
+}
+function viewHome(){
+  const cur = currentLesson();
+  const done = LESSONS.filter(L => S.done[L.key]).length, pct = Math.round(100 * done / Math.max(1, LESSONS.length));
+  const hr = new Date().getHours(), part = hr < 12 ? "Bom dia" : hr < 18 ? "Boa tarde" : "Boa noite";
+  const C = 2 * Math.PI * 32, dash = (C * Math.max(pct, 2) / 100).toFixed(1);
+  let h = `<div class="home"><section class="hero" aria-label="Seu dia">
+    <h2 class="hi">Numaẽ<i>!</i></h2>
+    <p class="sub">${part}. Cada dia um pouco de Ticuna.</p>
+    <div class="hstats"><div class="hstat"><b>${streakN()}</b><span>dias seguidos</span></div><div class="hstat"><b>${S.xp}</b><span>pontos</span></div><div class="hstat"><b>${seenCount()}</b><span>palavras vistas</span></div></div>`;
+  if(cur){
+    const ln = cur.explain ? cur.explain[0] : `Lição ${cur.idx + 1}`;
+    h += `<div class="cont"><div class="ring" aria-hidden="true"><svg viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" fill="none" stroke="rgba(255,255,255,.14)" stroke-width="8"/><circle cx="38" cy="38" r="32" fill="none" stroke="var(--urucum)" stroke-width="8" stroke-linecap="round" stroke-dasharray="${dash} ${C.toFixed(1)}"/></svg><b>${pct}%</b></div>
+      <div style="min-width:0"><div class="k">Próxima lição</div><div class="t">${esc(ln)}</div><div class="u">${esc(cur.unit.title)} · ${done} de ${LESSONS.length} lições</div></div>
+      <button class="btn go" data-lesson="${cur.key}">Continuar</button></div>`;
+  } else h += `<div class="cont"><div style="grid-column:1/-1"><div class="k">Trilha completa</div><div class="t">Você terminou todas as lições. Agora é revisar e ler as reuniões.</div></div></div>`;
+  h += `</section>`;
+  const wd = wordOfDay();
+  if(wd){
+    const [it, a] = wd;
+    h += `<section class="hsec"><h3>Palavra do dia <small>toque nas cores</small></h3><div class="wotd">${favBtn(it, "sm")}
+      <div class="word tcn">${segHTML(it.tcn, a.parts)}</div><div class="wpt">${esc(it.pt)}</div>
+      <ul class="parts">${a.parts.map(([f, k, m]) => `<li class="k-${k}">${k === "pre" ? esc(f) + "-" : k === "suf" ? "-" + esc(f) : esc(f)} · ${esc(m || KNAME[k])}</li>`).join("")}</ul>
+      ${it.note ? `<p class="note" style="margin:0">${esc(it.note)}</p>` : ""}</div></section>`;
+  }
+  const w = typeof WEEKS !== "undefined" && WEEKS.length ? (WEEKS.find(x => x.week === isoWeek(new Date())) || WEEKS.find(x => x.week < isoWeek(new Date())) || WEEKS[WEEKS.length - 1]) : null;
+  if(w){
+    h += `<section class="hsec"><h3>Reunião da semana <small>${esc(w.plabel || w.label)}</small></h3><div class="wkrow">${w.docs.map(d => {
+      const r = d.blocks.find(b => b.t === (d.kind === "apostila" ? "wread" : "title")) || {};
+      return `<button class="wkc ${d.kind === "apostila" ? "wb" : ""}" data-doc="${esc(w.week + ":" + d.kind)}"><span class="band2">${d.kind === "apostila" ? "VIDA E MINISTÉRIO" : "A SENTINELA"}</span><span class="tx tcn">${esc(r.s || d.title)}</span></button>`;
+    }).join("")}</div></section>`;
+  }
+  const favs = favItems().length, weak = ALL.filter(it => S.stats[it.id] && S.stats[it.id].wrong > 0).length;
+  h += `<section class="hsec"><h3>Praticar</h3><div class="tiles">
+    <button class="tile" data-go="treino"><span class="ic" style="background:var(--river)">${HIC.rev}</span><b>Revisar</b><span>${favs ? favs + (favs === 1 ? " favorita" : " favoritas") : "Sem favoritas ainda"}${weak ? " · " + weak + " com erro" : ""}</span></button>
+    <button class="tile" data-go="jogos"><span class="ic" style="background:var(--urucum)">${HIC.game}</span><b>Jogos</b><span>Pares, memória e mais</span></button>
+    <button class="tile" data-go="dic"><span class="ic" style="background:#2E4A7D">${HIC.dic}</span><b>Dicionário</b><span>${ALL.length} palavras e frases</span></button>
+    <button class="tile" data-go="leit"><span class="ic" style="background:#9B6D17">${HIC.dic}</span><b>Reuniões</b><span>Apostila e Sentinela</span></button>
+  </div></section>`;
+  return h + `</div>`;
+}
+function bindHome(){
+  document.querySelectorAll(".home [data-doc]").forEach(b => b.onclick = () => openDoc(b.dataset.doc));
+  bindFav($("#main"));
+}
+
 /* ---------- Leitura: A Sentinela em Ticuna, palavra por palavra ---------- */
 // O texto do artigo fica só neste aparelho (o Junior cola do jw.org). As palavras são analisadas
 // com o glossário dos livros e os PDFs (DB.lex); o que não está lá é deduzido pelas partes e marcado.
@@ -1693,7 +1832,6 @@ Regras: juntando os "texto" na ordem tem que dar exatamente "${k}" (minúsculas)
 document.addEventListener("keydown", e => { if(e.key === "Escape" && !$("#wsheet").hidden && $("#chat").hidden) closeWord(); });
 
 /* ---------- início ---------- */
-try{ const t = localStorage.getItem(KEY+".tab"); if(t) TAB = t; }catch(e){}
-setTab(TAB);
+setTab("inicio"); // o app sempre abre na tela inicial
 </script>
 </body></html>
